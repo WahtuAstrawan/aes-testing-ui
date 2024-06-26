@@ -66,7 +66,7 @@ const RegisterPage = () => {
 
   return (
     <div>
-      <h1 className="p-5 font-bold text-2xl">Register Page</h1>
+      <h1 className="p-5 font-bold text-3xl">Register Page</h1>
       <br />
       <Textfield hint="Name" value={name} onChange={handleNameChange} />
       <p className="p-2" />

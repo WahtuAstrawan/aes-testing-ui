@@ -1,19 +1,17 @@
 import { aesEncrypt, aesDecrypt } from "../helpers/aes";
 
-const registerUser = async (
-  name: string,
+const loginUser = async (
   email: string,
-  password: string,
-  photo: string
+  password: string
 ): Promise<{ raw: string; clean: string }> => {
   try {
-    const payload = { name, email, password, photo };
+    const payload = { email, password };
     console.log(`Raw Payload (Before Encrypt): ${payload}`);
 
     const encryptedPayload = aesEncrypt(JSON.stringify(payload));
     console.log(`Cipher Payload (After Encrypt): ${encryptedPayload}`);
 
-    const response = await fetch("http://localhost:3000/users/register", {
+    const response = await fetch("http://localhost:3000/users/login", {
       method: "POST",
       body: encryptedPayload,
     });
@@ -25,11 +23,12 @@ const registerUser = async (
     const encryptedResponse = await response.text();
     const decryptedResponse = aesDecrypt(encryptedResponse);
     const data = JSON.parse(decryptedResponse);
+    localStorage.setItem("auth", "granted");
     return { raw: encryptedResponse, clean: JSON.stringify(data) };
   } catch (error) {
-    console.error("Error registering user:", error);
+    console.error("Error login user:", error);
     return { raw: "None", clean: `${error}` };
   }
 };
 
-export default registerUser;
+export default loginUser;
