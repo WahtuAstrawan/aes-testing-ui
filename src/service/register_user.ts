@@ -5,7 +5,7 @@ const registerUser = async (
   email: string,
   password: string,
   photo: string
-): Promise<string> => {
+): Promise<{ raw: string; clean: string }> => {
   try {
     const payload = { name, email, password, photo };
     const encryptedPayload = aesEncrypt(JSON.stringify(payload));
@@ -22,10 +22,10 @@ const registerUser = async (
     const encryptedResponse = await response.text();
     const decryptedResponse = aesDecrypt(encryptedResponse);
     const data = JSON.parse(decryptedResponse);
-    return JSON.stringify(data);
+    return { raw: encryptedResponse, clean: JSON.stringify(data) };
   } catch (error) {
     console.error("Error registering user:", error);
-    return `${error}`;
+    return { raw: "", clean: `${error}` };
   }
 };
 

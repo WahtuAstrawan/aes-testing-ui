@@ -11,7 +11,10 @@ const RegisterPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [imageURL, setImageURL] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<{ raw: string; clean: string }>({
+    raw: "",
+    clean: "",
+  });
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +51,11 @@ const RegisterPage = () => {
   const handleRegister = async () => {
     try {
       const res = await registerUser(name, email, password, imageURL);
-      setMessage(res);
+      setMessage({ raw: res.raw, clean: res.clean });
+      setName("");
+      setEmail("");
+      setPassword("");
+      setImageURL("");
       if (modalRef.current) {
         modalRef.current.showModal();
       }
