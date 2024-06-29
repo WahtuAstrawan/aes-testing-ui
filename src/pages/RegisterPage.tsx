@@ -36,8 +36,8 @@ const RegisterPage = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
 
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
+      reader.onloadend = () => {
+        if (reader.result && typeof reader.result === "string") {
           setImageURL(reader.result);
         }
       };
@@ -50,6 +50,7 @@ const RegisterPage = () => {
 
   const handleRegister = async () => {
     try {
+      console.log(imageURL);
       const res = await registerUser(name, email, password, imageURL);
       setMessage({ raw: res.raw, clean: res.clean });
       setName("");

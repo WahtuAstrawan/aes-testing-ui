@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import getUsers from "../service/get_users";
+import { User } from "../types/user";
+import UserView from "../components/UserView";
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const [users, setUsers] = useState<User[]>([]);
   const [message, setMessage] = useState<{ raw: string; clean: string }>({
     raw: "",
     clean: "",
@@ -13,6 +16,7 @@ const HomePage = () => {
     try {
       const res = await getUsers();
       setMessage({ raw: res.raw, clean: res.clean });
+      setUsers(JSON.parse(res.clean));
     } catch (error) {
       console.error("Error while fetchin users:", error);
     }
@@ -62,6 +66,16 @@ const HomePage = () => {
           >
             Copy
           </button>
+        </div>
+      </div>
+      <div className="py-4">
+        <div className="container mx-auto p-4">
+          <h1 className="text-2xl font-bold mb-4">User List</h1>
+          <ul className="divide-y divide-gray-200">
+            {users.map((user) => (
+              <UserView user={user} />
+            ))}
+          </ul>
         </div>
       </div>
       <p className="p-10" />
